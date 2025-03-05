@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 # webd5015-project-ai_roommate_finder
 webd5015-project-ai_roommate_finder created by GitHub Classroom
-=======
+
 # TailAdmin Next.js - Free Next.js Tailwind Admin Dashboard Template
 
 TailAdmin is a free and open-source admin dashboard template built on **Next.js and Tailwind CSS** providing developers with everything they need to create a feature-rich and data-driven: back-end, dashboard, or admin panel solution for any sort of web project.
@@ -171,4 +170,3 @@ TailAdmin Next.js Free Version is released under the MIT License.
 ## Support
 
 If you find this project helpful, please consider giving it a star on GitHub. Your support helps us continue developing and maintaining this template.
->>>>>>> f7b36b8a84383788e2101c052609853a7a7004d3
