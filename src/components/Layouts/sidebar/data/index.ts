@@ -6,26 +6,22 @@ export const NAV_DATA = [
     items: [
       {
         title: "Dashboard",
+        url: "/",
         icon: Icons.HomeIcon,
-        items: [
-          {
-            title: "eCommerce",
-            url: "/",
-          },
-        ],
-      },
-      {
-        title: "Calendar",
-        url: "/calendar",
-        icon: Icons.Calendar,
         items: [],
       },
-      {
-        title: "Profile",
-        url: "/profile",
-        icon: Icons.User,
-        items: [],
-      },
+      // {
+      //   title: "Calendar",
+      //   url: "/calendar",
+      //   icon: Icons.Calendar,
+      //   items: [],
+      // },
+      // {
+      //   title: "Profile",
+      //   url: "/profile",
+      //   icon: Icons.User,
+      //   items: [],
+      // },
       {
         title: "Forms",
         icon: Icons.Alphabet,
@@ -51,31 +47,31 @@ export const NAV_DATA = [
           },
         ],
       },
-      {
-        title: "Pages",
-        icon: Icons.Alphabet,
-        items: [
-          {
-            title: "Settings",
-            url: "/pages/settings",
-          },
-        ],
-      },
+      // {
+      //   title: "Pages",
+      //   icon: Icons.Alphabet,
+      //   items: [
+      //     {
+      //       title: "Settings",
+      //       url: "/pages/settings",
+      //     },
+      //   ],
+      // },
     ],
   },
   {
     label: "OTHERS",
     items: [
-      {
-        title: "Charts",
-        icon: Icons.PieChart,
-        items: [
-          {
-            title: "Basic Chart",
-            url: "/charts/basic-chart",
-          },
-        ],
-      },
+      // {
+      //   title: "Charts",
+      //   icon: Icons.PieChart,
+      //   items: [
+      //     {
+      //       title: "Basic Chart",
+      //       url: "/charts/basic-chart",
+      //     },
+      //   ],
+      // },
       {
         title: "UI Elements",
         icon: Icons.FourCircle,
