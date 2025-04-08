@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { findMatches } from "@/lib/aiMatcher"; // ✅ updated import path
+import { findMatches } from "@/lib/aiMatcher";
 
 export async function GET(req: Request) {
   // Extract userId from URL

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use server"
 
 import { signIn, signOut } from "../auth"
@@ -12,3 +13,19 @@ export async function logout() {
     await signOut({ redirectTo: '/auth/sign-in' })
     revalidatePath('/')
 }
+=======
+// "use server"
+
+// import { signIn, signOut } from "../auth"
+// import { revalidatePath } from "next/cache"
+
+// export async function login(provider: string) {
+//     await signIn(provider, { redirectTo: '/' })
+//     revalidatePath('/')
+// }
+
+// export async function logout() {
+//     await signOut({ redirectTo: '/auth/sign-in' })
+//     revalidatePath('/')
+// }
+>>>>>>> origin/main

@@ -9,25 +9,39 @@ import {
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LogOutIcon, SettingsIcon, UserIcon } from "./icons";
+<<<<<<< HEAD
 import { useSession } from "next-auth/react";
 import { logout } from "../../../../../actions/auth";
 
 export function UserInfo() {
 
   const { data: session, status } = useSession()
+=======
+import { signOut, useSession } from "next-auth/react";
+// import { logout } from "../../../../../actions/auth";
+
+export function UserInfo() {
+
+  const { data: session, status, update } = useSession()
+>>>>>>> origin/main
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const USER = {
-    name: "John Smith",
-    email: "johnson@nextadmin.com",
-    img: "/images/user/user-03.png",
-  };
+  const handleLogout = async() => {
+    await signOut({ redirect: true, callbackUrl: '/auth/sign-in' }).then(() => {
+      window.location.href = 'auth/sign-in'
+    })
+  }
+
+  useEffect(() => {
+    if(!session) update()
+  }, [session?.user])
 
   return (
     <>
+<<<<<<< HEAD
     {!session?.user ? (
       <Link href={"/auth/sign-in"}>
         <div className="bg-indigo-600 text-white text-sm px-4 rounded-md">
@@ -36,11 +50,18 @@ export function UserInfo() {
       </Link>
     ) : (
     <Dropdown isOpen={isOpen} setIsOpen={setIsOpen}>
+=======
+    {session?.user && <Dropdown isOpen={isOpen} setIsOpen={setIsOpen}>
+>>>>>>> origin/main
       <DropdownTrigger className="rounded align-middle outline-none ring-primary ring-offset-2 focus-visible:ring-1 dark:ring-offset-gray-dark">
         <span className="sr-only">My Account</span>
 
         <figure className="flex items-center gap-3">
+<<<<<<< HEAD
           {session.user.image && <Image
+=======
+          {session?.user?.image && <Image
+>>>>>>> origin/main
             src={session.user.image}
             className="size-12"
             alt={`Avatar of ${session.user.image}`}
@@ -49,7 +70,11 @@ export function UserInfo() {
             height={200}
           />}
           <figcaption className="flex items-center gap-1 font-medium text-dark dark:text-dark-6 max-[1024px]:sr-only">
+<<<<<<< HEAD
             <span>{session.user.name}</span>
+=======
+            <span>{session?.user?.name}</span>
+>>>>>>> origin/main
 
             <ChevronUpIcon
               aria-hidden
@@ -70,7 +95,11 @@ export function UserInfo() {
         <h2 className="sr-only">User information</h2>
 
         <figure className="flex items-center gap-2.5 px-5 py-3.5">
+<<<<<<< HEAD
           {session.user.image && <Image
+=======
+          {session?.user?.image && <Image
+>>>>>>> origin/main
             src={session.user.image}
             className="size-12"
             alt={`Avatar for ${session.user.name}`}
@@ -81,10 +110,17 @@ export function UserInfo() {
 
           <figcaption className="space-y-1 text-base font-medium">
             <div className="mb-2 leading-none text-dark dark:text-white">
+<<<<<<< HEAD
               {session.user.name}
             </div>
 
             <div className="leading-none text-gray-6">{session.user.email}</div>
+=======
+              {session?.user?.name}
+            </div>
+
+            <div className="leading-none text-gray-6">{session?.user?.email}</div>
+>>>>>>> origin/main
           </figcaption>
         </figure>
 
@@ -119,7 +155,11 @@ export function UserInfo() {
         <div className="p-2 text-base text-[#4B5563] dark:text-dark-6">
           <button
             className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[9px] hover:bg-gray-2 hover:text-dark dark:hover:bg-dark-3 dark:hover:text-white"
+<<<<<<< HEAD
             onClick={() => logout()}
+=======
+            onClick={() => handleLogout()}
+>>>>>>> origin/main
           >
             <LogOutIcon />
 
@@ -128,7 +168,11 @@ export function UserInfo() {
         </div>
       </DropdownContent>
     </Dropdown>
+<<<<<<< HEAD
   )}
+=======
+  }
+>>>>>>> origin/main
   </>
   );
 }
