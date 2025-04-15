@@ -5,6 +5,7 @@ import { passwordSchema } from "../../../lib/validators";
 import { z } from "zod";
 import InputGroup from "../../../components/FormElements/InputGroup";
 import { Checkbox } from "../../../components/FormElements/checkbox";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 
 const signupSchema = z
@@ -85,25 +86,37 @@ export default function Signup() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validate()) {
-        try {
-            const res = await fetch("/api/auth/sign-up", {
-              method: 'POST',
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(formData),
-            });
-      
-            const data = await res.json();
-      
-            if (!res.ok) throw new Error(data.message || "Signup failed.");
-      
-            router.push("/auth/sign-in");
-        } catch (err: any) {
-            setErrors(err.message);
-        } finally {
-            setLoading(false);
+      setLoading(true);
+      try {
+        const res = await fetch("/api/auth/sign-up", {
+          method: 'POST',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+  
+        const data = await res.json();
+  
+        if (!res.ok) throw new Error(data.message || "Signup failed.");
+  
+        // Automatically sign in the user after successful sign-up
+        const signInResponse = await signIn("credentials", {
+          redirect: false,
+          email: formData.email,
+          password: formData.password,
+        });
+  
+        if (signInResponse?.ok) {
+          router.push("/onboarding"); // Redirect to the desired page after sign-in
+        } else {
+          setErrors(prev => ({ ...prev, email: "Sign-in failed after sign-up." }));
         }
+      } catch (err: any) {
+        setErrors(prev => ({ ...prev, email: err.message }));
+      } finally {
+        setLoading(false);
+      }
     }
-  };
+  };  
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">

@@ -10,7 +10,7 @@ import { useSearchParams } from "next/navigation";
 export default function Signin() {
 
     const searchParams = useSearchParams();
-    const message = searchParams.get("message");
+    const message = searchParams!.get("message");
 
   return (
     <>
