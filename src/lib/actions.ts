@@ -5,8 +5,7 @@ import { signIn, signOut } from "../../auth"
 import { revalidatePath } from "next/cache"
 import { cookies } from 'next/headers'
 import { auth as nextAuth } from '../../auth'
-
-
+import { db } from "@/lib/db"; // ✅ use correct prisma client import
 
 export const auth = nextAuth;
 
@@ -36,25 +35,6 @@ export async function logout() {
   }
 }
 
-// export async function authenticate(
-//   prevState: string | undefined,
-//   formData: FormData,
-// ) {
-//   try {
-//     await signIn('credentials', formData);
-//   } catch (error) {
-//     if (error instanceof AuthError) {
-//       switch (error.type) {
-//         case 'CredentialsSignin':
-//           return 'Invalid credentials.';
-//         default:
-//           return 'Something went wrong.';
-//       }
-//     }
-//     throw error;
-//   }
-// }
-
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
@@ -69,7 +49,7 @@ export async function authenticate(
     if (res?.error) return 'Invalid credentials.';
 
     const email = formData.get("email") as string;
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await db.user.findUnique({ where: { email } }); // ✅ updated
 
     if (!user) return 'User not found.';
 
