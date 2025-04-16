@@ -1,11 +1,10 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+import { db } from "@/lib/db"; // ✅ Use the same singleton instance
 
 test('creates a user', async () => {
   const timestamp = Date.now();
   const email = `john.doe+${timestamp}@example.com`;
 
-  const user = await prisma.user.create({
+  const user = await db.user.create({
     data: {
       name: 'John Doe',
       email: email,
