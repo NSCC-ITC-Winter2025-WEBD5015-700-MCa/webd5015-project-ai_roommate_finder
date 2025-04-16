@@ -5,8 +5,7 @@ import { signIn, signOut } from "../auth"
 import { revalidatePath } from "next/cache"
 import { cookies } from 'next/headers'
 import { auth as nextAuth } from '../auth'
-
-
+import { db } from "@/lib/db"; // ✅ use correct prisma client import
 
 export const auth = nextAuth;
 
@@ -50,7 +49,7 @@ export async function authenticate(
     if (res?.error) return 'Invalid credentials.';
 
     const email = formData.get("email") as string;
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await db.user.findUnique({ where: { email } }); // ✅ updated
 
     if (!user) return 'User not found.';
 

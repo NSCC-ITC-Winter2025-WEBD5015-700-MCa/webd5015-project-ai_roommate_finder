@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import db from "@/lib/db";
 
 export async function GET(req: Request, { params }: { params: { userId: string } }) {
   try {
-    const preferences = await prisma.preferences.findUnique({
+    const preferences = await db.preferences.findUnique({
       where: { userId: params.userId },
     });
 
@@ -20,7 +18,7 @@ export async function GET(req: Request, { params }: { params: { userId: string }
 export async function PUT(req: Request, { params }: { params: { userId: string } }) {
   try {
     const body = await req.json();
-    const updatedPreferences = await prisma.preferences.upsert({
+    const updatedPreferences = await db.preferences.upsert({
       where: { userId: params.userId },
       update: body,
       create: { userId: params.userId, ...body },
@@ -36,13 +34,8 @@ export async function PATCH(req: Request, { params }: { params: { userId: string
   try {
     const body = await req.json();
 
-    // The error indicated that 'id' is an unknown argument.
-    // Ensure that 'userId' is used and the body keys match the actual preferences model.
-
-    // Prepare the data to be updated
     const updateData: Record<string, any> = {};
 
-    // Map the fields that are acceptable based on the model schema
     if (body.ethnicity) updateData.ethnicity = body.ethnicity;
     if (body.religion) updateData.religion = body.religion;
     if (body.minAge) updateData.minAge = body.minAge;
@@ -60,8 +53,7 @@ export async function PATCH(req: Request, { params }: { params: { userId: string
     if (body.smoking !== undefined) updateData.smoking = body.smoking;
     if (body.cooking) updateData.cooking = body.cooking;
 
-    // Update preferences using the 'userId' in the URL params
-    const updatedPreferences = await prisma.preferences.update({
+    const updatedPreferences = await db.preferences.update({
       where: { userId: params.userId },
       data: updateData,
     });
@@ -74,7 +66,7 @@ export async function PATCH(req: Request, { params }: { params: { userId: string
 
 export async function DELETE(req: Request, { params }: { params: { userId: string } }) {
   try {
-    await prisma.preferences.delete({ where: { userId: params.userId } });
+    await db.preferences.delete({ where: { userId: params.userId } });
     return NextResponse.json({ message: "Preferences deleted" }, { status: 204 });
   } catch (error) {
     return NextResponse.json({ error: "Server error", details: error }, { status: 500 });
