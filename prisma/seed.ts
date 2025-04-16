@@ -1,9 +1,7 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import db from "@/lib/db";
 import { users } from "./users.js";
-import { adminUsers } from "./admin.js"; // ✅ import your new admin file
+import { adminUsers } from "./admin.js";
 import bcrypt from "bcrypt";
-
-const prisma = new PrismaClient();
 
 async function seedDatabase() {
   console.log("🌱 Seeding database...");
@@ -13,7 +11,7 @@ async function seedDatabase() {
     try {
       const hashedPassword = await bcrypt.hash(admin.password, 10);
 
-      await prisma.user.create({
+      await db.user.create({
         data: {
           name: admin.name,
           email: admin.email,
@@ -36,7 +34,7 @@ async function seedDatabase() {
     try {
       const hashedPassword = await bcrypt.hash(user.password, 10);
 
-      await prisma.user.create({
+      await db.user.create({
         data: {
           name: user.name,
           email: user.email,
@@ -63,7 +61,7 @@ async function seedDatabase() {
               drinking: user.habits.drinking,
               smoking: user.habits.smoking,
               cooking: user.cooking,
-            } as Prisma.PreferencesCreateWithoutUserInput,
+            },
           },
         },
       });
@@ -75,7 +73,7 @@ async function seedDatabase() {
   }
 
   console.log("✅ Seeding complete!");
-  await prisma.$disconnect();
+  await db.$disconnect();
 }
 
 seedDatabase();

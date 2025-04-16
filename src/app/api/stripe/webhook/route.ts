@@ -1,9 +1,8 @@
 // webhook
-
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { prisma } from "../../../../../prisma";
+import db from "@/lib/db"; // ✅ Use shared db instance
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16" as any,
@@ -11,7 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(req: Request) {
   const body = await req.text();
-  const requestHeaders = await headers();
+  const requestHeaders = headers();
   const sig = requestHeaders.get("stripe-signature") as string;
 
   let event: Stripe.Event;
@@ -33,35 +32,35 @@ export async function POST(req: Request) {
         const session = event.data.object as Stripe.Checkout.Session;
         const customerId = session.customer as string;
         const userId = session.metadata?.userId;
-      
+
         let isActive = false;
         const subscriptionId = session.subscription as string;
-      
+
         if (subscriptionId) {
           const subscription = await stripe.subscriptions.retrieve(subscriptionId);
           isActive = ["active", "trialing"].includes(subscription.status);
         }
-      
+
         if (userId && customerId) {
-          await prisma.user.update({
+          await db.user.update({
             where: { id: userId },
-            data: { 
+            data: {
               stripeCustomerId: customerId,
-              isPremium: isActive 
+              isPremium: isActive,
             },
           });
         } else {
           console.warn("⚠️ Missing userId or customerId in session metadata");
         }
-      
+
         break;
-      }      
+      }
 
       case "customer.subscription.deleted": {
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
 
-        await prisma.user.updateMany({
+        await db.user.updateMany({
           where: { stripeCustomerId: customerId },
           data: { isPremium: false },
         });

@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import db from "@/lib/db"; // ✅ Use shared db instance
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await db.user.findUnique({
       where: { id: params.id },
       include: { preferences: true },
     });
@@ -21,7 +19,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
   try {
     const body = await req.json();
-    const updatedUser = await prisma.user.update({
+    const updatedUser = await db.user.update({
       where: { id: params.id },
       data: body,
     });
@@ -34,7 +32,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   try {
-    await prisma.user.delete({ where: { id: params.id } });
+    await db.user.delete({ where: { id: params.id } });
     return NextResponse.json({ message: "User deleted" }, { status: 204 });
   } catch (error) {
     return NextResponse.json({ error: "Server error", details: error }, { status: 500 });

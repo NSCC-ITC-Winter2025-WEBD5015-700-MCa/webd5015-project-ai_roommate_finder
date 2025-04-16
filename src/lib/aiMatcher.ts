@@ -1,10 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import { db } from "@/lib/db"; // ✅ Use db, not prisma
 import { Together } from "together-ai";
 import dotenv from "dotenv";
 
 dotenv.config({ path: "./.env" });
 
-const prisma = new PrismaClient();
 const together = new Together({ apiKey: process.env.TOGETHER_API_KEY });
 
 function normalizePreferences(pref: any) {
@@ -25,7 +24,7 @@ function normalizePreferences(pref: any) {
 }
 
 export async function findMatches(userId: string) {
-  const user = await prisma.user.findUnique({
+  const user = await db.user.findUnique({
     where: { id: userId },
     include: { preferences: true },
   });
@@ -34,8 +33,7 @@ export async function findMatches(userId: string) {
     throw new Error("User or preferences not found");
   }
 
-  // 🔥 Get all match interactions (requests sent, received, and accepted)
-  const interactions = await prisma.match.findMany({
+  const interactions = await db.match.findMany({
     where: {
       OR: [
         { userId },
@@ -48,19 +46,17 @@ export async function findMatches(userId: string) {
     },
   });
 
-  // 🔥 Build a Set of user IDs to exclude
   const excludeIds = new Set<string>();
   for (const interaction of interactions) {
     const otherUserId = interaction.userId === userId ? interaction.matchId : interaction.userId;
     excludeIds.add(otherUserId);
   }
 
-  // 🧠 Fetch users excluding self + all interacted ones
-  const otherUsers = await prisma.user.findMany({
+  const otherUsers = await db.user.findMany({
     where: {
       id: {
         not: userId,
-        notIn: Array.from(excludeIds), // ✅ exclude already requested or matched
+        notIn: Array.from(excludeIds),
       },
     },
     include: { preferences: true },
@@ -73,7 +69,6 @@ export async function findMatches(userId: string) {
     const pref = normalizePreferences(u.preferences);
 
     let score = 0;
-
     if (pref.location === myPref.location) score++;
     if (pref.budgetMin <= myPref.budgetMax && pref.budgetMax >= myPref.budgetMin) score++;
     if (pref.occupation === myPref.occupation) score++;
@@ -87,14 +82,9 @@ export async function findMatches(userId: string) {
       pref.cooking === myPref.cooking ||
       myPref.cooking === "Flexible" ||
       pref.cooking === "Flexible"
-    )
-      score++;
+    ) score++;
 
-    const isMatch = score >= 6;
-
-    // console.log(`${isMatch ? "yes" : "no"} ${u.name} — score: ${score}/10`);
-
-    return isMatch;
+    return score >= 6;
   });
 
   const matchNames = matches.map((m) => m.name).join(", ");
@@ -104,7 +94,7 @@ export async function findMatches(userId: string) {
 }
 
 export async function getMatchDetails(matchId: string) {
-  const match = await prisma.user.findUnique({
+  const match = await db.user.findUnique({
     where: { id: matchId },
     include: { preferences: true },
   });

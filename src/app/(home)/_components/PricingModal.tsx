@@ -33,7 +33,7 @@ export default function PricingModal({ open, onClose }: Props) {
             <h2 className="text-md font-normal">get 30 matches requests</h2>
             <button
               className="w-[200px] mt-5 px-4 py-2 bg-primary text-white rounded mt-2 hover:bg-primaryhover"
-              onClick={() => subscribe("price_1RD4iMRxTMGXma4mLdbthgnE")}
+              onClick={() => subscribe("price_1RCjnQ2LeT9bJ5gRWIkKswrs")}
             >
               Subscribe Monthly
             </button>
@@ -44,7 +44,7 @@ export default function PricingModal({ open, onClose }: Props) {
             <h2 className="text-md font-normal">get unlimited matches requests</h2>
             <button
               className="w-[220px] mt-5 px-4 py-2 bg-green-600 text-white rounded mt-2 hover:bg-green-700"
-              onClick={() => subscribe("price_1RD4iMRxTMGXma4mSxzivPUr")}
+              onClick={() => subscribe("price_1RCjnQ2LeT9bJ5gRSTbDmHwA")}
             >
               Subscribe Yearly
             </button>
