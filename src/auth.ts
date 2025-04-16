@@ -7,7 +7,7 @@ import { authConfig } from "./auth.config";
 import { z } from "zod";
 import bcrypt from "bcrypt"
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "./prisma";
+import { prisma } from "../prisma";
  
 async function getUser(email: string) {
   try {
@@ -70,6 +70,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = user.role;
       }
       return token;
     },
@@ -78,19 +79,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user && token?.id) {
         session.user.id = token.id as string;
   
-        // Fetch the full user from the DB
+        // Optional: if you already have the role in the token
+        session.user.role = token.role as string;
+  
+        // Fetch the full user from your database to get the latest role/image
         const dbUser = await getUser(session.user.email!);
   
         if (dbUser) {
-          // ✅ Override the default Google image if you have a custom one
           session.user.role = dbUser.role;
           session.user.image = dbUser.image || session.user.image;
         }
       }
   
       return session;
-    },
-  },
+    }
+  } 
   
   
 });

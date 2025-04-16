@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { LogOutIcon, SettingsIcon, UserIcon } from "./icons";
 import { signOut, useSession } from "next-auth/react";
-// import { logout } from "../../../../../actions/auth";
+import { logout } from "@/lib/actions";
 
 export function UserInfo() {
 
@@ -20,8 +20,9 @@ export function UserInfo() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLogout = () => {
-    signOut({ callbackUrl: `${window.location.origin}/auth/sign-in` });
+  const handleLogout = async () => {
+    await logout();
+    window.location.href = "/auth/sign-out";
   }
 
   useEffect(() => {

@@ -1,18 +1,18 @@
 'use server';
 
 import { AuthError } from 'next-auth';
-import { signIn, signOut } from "../../auth"
+import { signIn, signOut } from "../auth"
 import { revalidatePath } from "next/cache"
 import { cookies } from 'next/headers'
-import { auth as nextAuth } from '../../auth'
+import { auth as nextAuth } from '../auth'
 
 
 
 export const auth = nextAuth;
 
 export async function login(provider: string) {
-    await signIn(provider, { redirectTo: '/' })
-    revalidatePath('/')
+    await signIn(provider, { redirectTo: '/home' })
+    revalidatePath('/home')
 }
 
 export async function logout() {
@@ -35,25 +35,6 @@ export async function logout() {
     return { success: false }
   }
 }
-
-// export async function authenticate(
-//   prevState: string | undefined,
-//   formData: FormData,
-// ) {
-//   try {
-//     await signIn('credentials', formData);
-//   } catch (error) {
-//     if (error instanceof AuthError) {
-//       switch (error.type) {
-//         case 'CredentialsSignin':
-//           return 'Invalid credentials.';
-//         default:
-//           return 'Something went wrong.';
-//       }
-//     }
-//     throw error;
-//   }
-// }
 
 export async function authenticate(
   prevState: string | undefined,
