@@ -1,17 +1,17 @@
 'use server';
 
 import { AuthError } from 'next-auth';
-import { signIn, signOut } from "../../auth"
+import { signIn, signOut } from "../auth"
 import { revalidatePath } from "next/cache"
 import { cookies } from 'next/headers'
-import { auth as nextAuth } from '../../auth'
+import { auth as nextAuth } from '../auth'
 import { db } from "@/lib/db"; // ✅ use correct prisma client import
 
 export const auth = nextAuth;
 
 export async function login(provider: string) {
-    await signIn(provider, { redirectTo: '/' })
-    revalidatePath('/')
+    await signIn(provider, { redirectTo: '/home' })
+    revalidatePath('/home')
 }
 
 export async function logout() {

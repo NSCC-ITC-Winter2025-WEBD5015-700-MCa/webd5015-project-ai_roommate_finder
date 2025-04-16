@@ -1,4 +1,4 @@
-import Signin from '../_components/Signin';
+import Signin from '../../(home)/(onboarding)/_components/Signin';
 
 export default function SignInPage() {
   return (

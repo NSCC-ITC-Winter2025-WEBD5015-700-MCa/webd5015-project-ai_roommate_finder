@@ -10,9 +10,9 @@ import DashboardStats from "./_components/DashboardStats";
 export default async function AdminDashboardPage() {
   const session = await auth();
 
-  if (!session?.user || session.user.role !== "Admin") {
-    redirect("/auth/sign-in?message=signin_required");
-  }
+  // if (!session?.user || session.user.role !== "Admin") {
+  //   redirect("/auth/sign-in?message=signin_required");
+  // }
 
   const totalUsers = await db.user.count();
   const premiumUsers = await db.user.count({ where: { isPremium: true } });

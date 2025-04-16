@@ -3,9 +3,12 @@
 import { auth } from "@/lib/actions";
 import { db } from "@/lib/db";
 import RequestsPage from "./RequestsPage"; // Import the client-side component
+import { redirect } from "next/navigation";
+
 
 export default async function RequestsPageServer() {
   const session = await auth();
+
   if (!session?.user?.id) {
     // Redirect if no user session
     return redirect("/auth/sign-in");

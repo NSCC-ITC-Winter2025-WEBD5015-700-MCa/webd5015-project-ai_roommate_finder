@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -39,7 +38,7 @@ export default function RequestsPage({ requests }: RequestsPageProps) {
 
     socket.on("connect", () => {
       console.log("✅ Connected to socket:", socket.id);
-      socket.emit("join", session.user.id);
+      socket.emit("join", session?.user?.id);
     });
 
     socket.on("refresh-requests", async () => {

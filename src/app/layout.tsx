@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 import { Providers } from "./providers";
 import { SessionProvider } from "next-auth/react";
-import { auth } from "../../auth";
+import { auth } from "../auth";
 
 export const metadata: Metadata = {
   title: {
@@ -23,15 +23,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const session = await auth();
 
   return (
-    <SessionProvider session={session}>
-      <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
         <body className="min-h-screen bg-gray-2 dark:bg-dark">
-          <Providers>
-            <NextTopLoader showSpinner={false} />
-            {children}
-          </Providers>
+          <SessionProvider session={session}>
+            <Providers>
+              <NextTopLoader showSpinner={false} />
+              {children}
+            </Providers>
+          </SessionProvider>
         </body>
       </html>
-    </SessionProvider>
   );
 }

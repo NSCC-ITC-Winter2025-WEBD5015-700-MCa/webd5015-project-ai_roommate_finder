@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import WelcomeUpload from '../_components/WelcomeUpload';
-import AboutYou from '../_components/AboutYou';
-import PreferencesForm from '../_components/PreferencesForm';
+import WelcomeUpload from './WelcomeUpload';
+import AboutYou from './AboutYou';
+import PreferencesForm from './PreferencesForm';
 
 export default function OnboardingPage() {
   const [step, setStep] = useState(1);
@@ -47,7 +47,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-6 bg-dark shadow rounded-xl">
+    <div className="max-w-xl mx-auto mt-10 p-6 bg-dark shadow rounded-xl flex-1">
       {step === 1 && <WelcomeUpload onImageUpload={handleImageUpload} />}
 
       {step === 2 && (
